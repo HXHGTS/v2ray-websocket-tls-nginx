@@ -1,7 +1,4 @@
-server {  
-    ### 1:  
-    server_name domainname;  
-  
+
     listen 80 reuseport fastopen=10;  
     rewrite ^(.*) https://$server_name$1 permanent;  
     if ($request_method  !~ ^(POST|GET)$) { return  501; }  
