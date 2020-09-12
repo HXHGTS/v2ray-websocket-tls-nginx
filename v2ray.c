@@ -22,8 +22,11 @@ Menu:UI();
         goto Menu;
     }
     else if (mode == 3) {
-        printf("服务器配置:\n");
+        printf("v2ray配置:\n");
         system("cat /usr/local/etc/v2ray/config.json");
+        printf("\n");
+        printf("nginx配置:\n");
+        system("cat /etc/nginx/conf.d/default.conf");
         printf("\n");
         printf("客户端配置:\n");
         system("cat /usr/local/etc/v2ray/client.json");
@@ -31,11 +34,13 @@ Menu:UI();
         goto Menu;
     }
     else if (mode == 4) {
-        system("cat /usr/local/etc/v2ray/config.json");
+        system("vi /usr/local/etc/v2ray/config.json");
+        system("systemctl restart v2ray");
+        system("systemctl restart nginx");
         goto Menu;
     }
     else if (mode == 5) {
-        system("vi /usr/local/etc/v2ray/config.json");
+        system("vi /etc/nginx/conf.d/default.conf");
         system("systemctl restart v2ray");
         system("systemctl restart nginx");
         goto Menu;
@@ -120,7 +125,7 @@ int install_v2ray() {
     fscanf(config, "%s", uuid);
     fclose(config);
     config = fopen("/usr/local/etc/v2ray/config.json", "a");
-    fprintf(config, "       \"id\": \"%s\"  \n", uuid);
+    fprintf(config, "       \"id\": \"%s\",  \n", uuid);
     fprintf(config, "       \"alterId\": 64  \n");
     fclose(config);
     system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/config.json.2 >> /usr/local/etc/v2ray/config.json");
