@@ -108,7 +108,7 @@ int install_v2ray() {
     printf("正在生成配置文件. . .\n");
     system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/config.json.1 > /usr/local/etc/v2ray/config.json");
     printf("正在生成UUID. . .\n");
-    system("uuidgen > /usr/local/etc/v2ray/uuid.conf");
+    system("v2ctl uuid > /usr/local/etc/v2ray/uuid.conf");
     config = fopen("/usr/local/etc/v2ray/uuid.conf", "r");
     fscanf(config, "%s", uuid);
     fclose(config);
