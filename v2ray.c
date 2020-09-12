@@ -128,11 +128,11 @@ int install_v2ray() {
     fprintf(config, "    server_name %s;  \n", sni);
     fclose(config);
     system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf.2 >> /etc/nginx/conf.d/default.conf");
-    system("curl https://github.com/HXHGTS/v2ray-websocket-tls-nginx/raw/master/nginx.conf.1 > /etc/nginx/nginx.conf");
+    system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/nginx.conf.1 > /etc/nginx/nginx.conf");
     config = fopen("/etc/nginx/nginx.conf", "a");
     fprintf(config, "        server_name  %s;\n", sni);
     fclose(config);
-    system("curl https://github.com/HXHGTS/v2ray-websocket-tls-nginx/raw/master/nginx.conf.2 >> /etc/nginx/nginx.conf");
+    system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/nginx.conf.2 >> /etc/nginx/nginx.conf");
     system("wget https://github.com/HXHGTS/v2ray-websocket-tls-nginx/raw/master/html.zip -O /usr/share/nginx/html/html.zip");
     system("unzip -o /usr/share/nginx/html/html.zip -d /usr/share/nginx/html");
     system("rm -f /usr/share/nginx/html/html.zip");
