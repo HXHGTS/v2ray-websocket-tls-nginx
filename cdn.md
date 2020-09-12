@@ -1,6 +1,14 @@
 ### 套用CDN
 
-1.申请Cloudflare账号，绑定域名
+#### 方案1(域名已托管在Cloudflare)
+
+1.找到dns记录中服务器的域名的A记录与AAAA记录(如果有ipv6的话)
+
+2.点亮云朵☁️
+
+#### 方案2(域名未托管在Cloudflare)
+
+1.申请Cloudflare账号
 
 2.打开workers，新建
 
