@@ -119,7 +119,7 @@ int install_v2ray() {
     fclose(config);
     config = fopen("/usr/local/etc/v2ray/config.json", "a");
     fprintf(config, "       \"id\": \"%s\",  \n", uuid);
-    fprintf(config, "       \"alterId\": 64  \n");
+    fprintf(config, "       \"alterId\": 4  \n");
     fclose(config);
     system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/config.json.2 >> /usr/local/etc/v2ray/config.json");
     printf("正在配置html网页. . .\n");
@@ -143,7 +143,7 @@ int install_v2ray() {
     system("systemctl enable nginx");
     system("systemctl start nginx");
     config = fopen("/usr/local/etc/v2ray/client.json", "w");
-    fprintf(config, "  - {name: %s, server: %s, port: 443, type: vmess, uuid: %s, alterId: 64, cipher: auto, tls: true, network: ws, ws-path: /iso, ws-headers: {Host: %s}}", sni,sni,uuid,sni);
+    fprintf(config, "  - {name: %s, server: %s, port: 443, type: vmess, uuid: %s, alterId: 4, cipher: auto, tls: true, network: ws, ws-path: /iso, ws-headers: {Host: %s}}", sni,sni,uuid,sni);
     fclose(config);
     printf("正在检测v2ray与nginx运行状态，以下输出不为空则运行正常！\n");
     printf("--------------以下输出不为空则v2ray运行正常------------------\n");
