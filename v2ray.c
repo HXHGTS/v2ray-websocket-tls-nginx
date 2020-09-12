@@ -80,11 +80,11 @@ int install_v2ray() {
     scanf("%s", sni);
     system("setenforce 0");
     system("yum install -y curl unzip epel-release nginx");
-    system("wget https://install.direct/go.sh -O go.sh");
-    system("chmod +x go.sh");
-    system("bash go.sh");
+    system("wget https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh -O install-release.sh");
+    system("chmod +x install-release.sh");
+    system("bash install-release.sh");
     system("sleep 3");
-    system("rm -rf go.sh");
+    system("rm -rf install-release.sh");
     system("rm -rf TCPO.sh");
     system("rm -rf KernelUpdate.sh");
     system("echo \"------------------------------------------------------------------------------------\" >> /usr/local/etc/v2ray/certificate.crt");
