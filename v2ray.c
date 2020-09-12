@@ -140,9 +140,12 @@ int install_v2ray() {
     config = fopen("/usr/local/etc/v2ray/client.json", "w");
     fprintf(config, "  - {name: %s, server: %s, port: 443, type: vmess, uuid: %s, alterId: 64, cipher: auto, tls: true, network: ws, ws-path: /iso, ws-headers: {Host: %s}}", sni,sni,uuid,sni);
     fclose(config);
-    printf("正在检测v2ray与nginx运行状态. . .\n");
-    system("systemctl status v2ray");
-    system("systemctl status nginx");
+    printf("正在检测v2ray与nginx运行状态，以下输出不为空则运行正常！\n");
+    printf("--------------以下输出不为空则v2ray运行正常------------------\n");
+    system("ss -lp | grep v2ray");
+    printf("\n--------------以下输出不为空则nginx运行正常------------------\n");
+    system("ss -lp | grep nginx");
+    printf("--------------------------------------------------------\n");
     printf("v2ray部署完成！\n");
     printf("Clash配置:\n\n");
     system("cat /usr/local/etc/v2ray/client.json");
