@@ -106,7 +106,7 @@ int install_v2ray() {
     fclose(config);
     config = fopen("/usr/local/etc/v2ray/config.json", "a");
     fprintf(config, "       \"id\": \"%s\"  \n", uuid);
-    fprintf(config, "       \"alterId\": 64  \n", uuid);
+    fprintf(config, "       \"alterId\": 64  \n");
     fclose(config);
     system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/config.json.2 >> /usr/local/etc/v2ray/config.json");
     printf("正在配置html网页. . .\n");
