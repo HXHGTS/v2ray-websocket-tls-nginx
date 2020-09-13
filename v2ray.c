@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 
-FILE* config;
+FILE* config,* cer;
 char uuid[40],sni[30];
 int mode;
 
@@ -48,10 +48,12 @@ Menu:UI();
     else if (mode == 6) {
         printf("请输入已绑定此服务器ip的域名:");
         scanf("%s", sni);
+        if (fopen("/root/1.pem", "r") == NULL || fopen("/root/2.pem", "r") == NULL) {
+            printf("检测到证书与私钥文件未按照规定方式放置于根目录，强制退出！\n");
+            exit(0);
+        }
         system("cp -rf /root/1.pem /usr/local/etc/v2ray/certificate.pem");
         system("cp -rf /root/2.pem /usr/local/etc/v2ray/private.pem");
-        system("rm -rf /root/1.pem");
-        system("rm -rf /root/2.pem");
         system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf.1 > /etc/nginx/conf.d/default.conf");
         config = fopen("/etc/nginx/conf.d/default.conf", "a");
         fprintf(config, "    server_name %s;  \n", sni);
@@ -67,6 +69,18 @@ Menu:UI();
         goto Menu;
     }
     else if (mode == 7) {
+        printf("正在更新v2ray主程序. . .\n");
+        system("systemctl stop v2ray");
+        system("systemctl stop nginx");
+        system("wget https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh -O install-release.sh");
+        system("chmod +x install-release.sh");
+        system("bash install-release.sh");
+        system("systemctl start v2ray");
+        system("systemctl start nginx");
+        printf("v2ray主程序更新完成！\n");
+        goto Menu;
+    }
+    else if (mode == 8) {
         system("systemctl stop v2ray");
         system("systemctl stop nginx");
         goto Menu;
@@ -86,7 +100,7 @@ int UI() {
     printf("----------------------当前Kernel版本-----------------------\n");
     system("uname -sr");
     printf("-----------------------------------------------------------\n");
-    printf("1.安装v2ray\n2.运行v2ray\n3.显示配置\n4.修改v2ray配置\n5.修改nginx配置\n6.更新域名与SSL证书\n7.关闭v2ray\n0.退出\n");
+    printf("1.安装v2ray\n2.运行v2ray\n3.显示配置\n4.修改v2ray配置\n5.修改nginx配置\n6.更新域名与SSL证书\n7.更新v2ray\n8.关闭v2ray\n0.退出\n");
     printf("-----------------------------------------------------------\n");
     printf("请输入:");
     scanf("%d", &mode);
@@ -98,18 +112,19 @@ int install_v2ray() {
     printf("请输入已绑定此服务器ip的域名:");
     scanf("%s", sni);
     system("setenforce 0");
-    system("yum install -y curl unzip epel-release nginx");
+    system("yum install -y curl unzip bind-utils epel-release nginx");
     system("wget https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh -O install-release.sh");
     system("chmod +x install-release.sh");
     system("bash install-release.sh");
     system("sleep 3");
     system("rm -rf install-release.sh");
     system("rm -rf TCPO.sh");
-    system("rm -rf KernelUpdate.sh");
+    if (fopen("/root/1.pem", "r") == NULL || fopen("/root/2.pem", "r") == NULL) {
+        printf("检测到证书与私钥文件未按照规定方式放置于根目录，强制退出！\n");
+        exit(0);
+    }
     system("cp -rf /root/1.pem /usr/local/etc/v2ray/certificate.pem");
     system("cp -rf /root/2.pem /usr/local/etc/v2ray/private.pem");
-    system("rm -rf /root/1.pem");
-    system("rm -rf /root/2.pem");
     printf("正在生成配置文件. . .\n");
     system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/config.json.1 > /usr/local/etc/v2ray/config.json");
     printf("正在生成UUID. . .\n");
@@ -143,7 +158,7 @@ int install_v2ray() {
     system("systemctl enable nginx");
     system("systemctl start nginx");
     config = fopen("/usr/local/etc/v2ray/client.json", "w");
-    fprintf(config, "  - {name: %s, server: %s, port: 443, type: vmess, uuid: %s, alterId: 4, cipher: auto, tls: true, network: ws, ws-path: /iso, ws-headers: {Host: %s}}", sni,sni,uuid,sni);
+    fprintf(config, "  - {name: %s, server: %s, port: 443, type: vmess, uuid: %s, alterId: 4, cipher: auto, tls: true, network: ws, ws-path: /iso, ws-headers: {Host: %s}, udp: true}", sni,sni,uuid,sni);
     fclose(config);
     printf("正在检测v2ray与nginx运行状态，以下输出不为空则运行正常！\n");
     printf("--------------以下输出不为空则v2ray运行正常------------------\n");
