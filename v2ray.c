@@ -50,7 +50,7 @@ Menu:UI();
             printf("检测到证书与私钥文件未按照规定方式放置于根目录，强制退出！\n");
             exit(0);
         }
-        printf("请输入已绑定此服务器ip的域名:");
+        printf("请输入已绑定此服务器ip的新域名:");
         scanf("%s", sni);
         system("cp -rf /root/1.pem /usr/local/etc/v2ray/certificate.pem");
         system("cp -rf /root/2.pem /usr/local/etc/v2ray/private.pem");
@@ -64,7 +64,6 @@ Menu:UI();
         fprintf(config, "        server_name  %s;\n", sni);
         fclose(config);
         system("curl https://github.com/HXHGTS/v2ray-websocket-tls-nginx/raw/master/nginx.conf.2 >> /etc/nginx/nginx.conf");
-        system("systemctl restart v2ray");
         system("systemctl restart nginx");
         goto Menu;
     }
