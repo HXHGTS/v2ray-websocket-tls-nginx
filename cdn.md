@@ -31,6 +31,7 @@ fetch(request)
 4.修改一个好记的名称，比如***.***.workers.dev,填入v2ray的ws-headers中，并将ip改为cloudflare的可用ip
 
 一个典型Clash配置:
+```
   - {name: xxxxxxxxxx, server: 1.0.0.1, port: 443, type: vmess, uuid: xxxxxxxxx-xxxx-xxxx-xxxxxx, alterId: 4, cipher: auto, tls: true, network: ws, ws-path: /xxxxx, ws-headers: {Host: xxx.xxxxxx.workers.dev}}
-  
-1.0.0.1请下载[Cloudflare ip优选工具](https://wwa.lanzous.com/in4tcge5cob)根据最后确定的ip进行替换，host填Worker的网址，不是服务器网址！！！
+```
+1.0.0.1请下载[Cloudflare ip优选工具](https://wwa.lanzous.com/in4tcge5cob)，根据实际带宽优选CDN加速ip，最后用优选的ip进行替换，host填Worker的网址，不是服务器网址！！！
