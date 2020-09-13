@@ -12,7 +12,7 @@ yum install -y gcc wget && wget https://github.com/HXHGTS/v2ray-websocket-tls-ng
 ```
 ./v2ray
 ```
-CDN套用方法请参看[CDN.md](/cdn.md)
+CDN套用方法请参看[CDN套用方法](/cdn.md)
 
 ### 安装前准备：
 
