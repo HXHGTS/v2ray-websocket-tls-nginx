@@ -52,6 +52,9 @@ Menu:UI();
         }
         printf("请输入已绑定此服务器ip的新域名:");
         scanf("%s", sni);
+        config = fopen("/usr/local/etc/v2ray/sni.conf", "w");
+        fprintf(config, "%s", sni);
+        fclose(config);
         system("cp -rf /root/1.pem /usr/local/etc/v2ray/certificate.pem");
         system("cp -rf /root/2.pem /usr/local/etc/v2ray/private.pem");
         config = fopen("/etc/nginx/conf.d/default.conf", "w");
