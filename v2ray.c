@@ -52,7 +52,7 @@ Menu:UI();
         }
         printf("请输入已绑定此服务器ip的新域名:");
         scanf("%s", sni);
-        config = fopen("/usr/local/etc/v2ray/sni.conf", "w");
+        config = fopen("/usr/local/etc/sni.conf", "w");
         fprintf(config, "%s", sni);
         fclose(config);
         system("cp -rf /root/1.pem /usr/local/etc/v2ray/certificate.pem");
@@ -111,7 +111,7 @@ int install_v2ray() {
         printf("检测到证书与私钥文件未按照规定方式放置于根目录，强制退出！\n");
         exit(0);
     }
-    config = fopen("/usr/local/etc/v2ray/sni.conf", "r");
+    config = fopen("/usr/local/etc/sni.conf", "r");
     fscanf(config, "%s", sni);
     fclose(config);
     system("setenforce 0");
@@ -170,7 +170,7 @@ int KernelUpdate() {
     if ((fopen("KernelUpdate.sh", "r")) == NULL) {
         printf("请输入已绑定此服务器ip的域名:");
         scanf("%s", sni);
-        config = fopen("/usr/local/etc/v2ray/sni.conf", "w");
+        config = fopen("/usr/local/etc/sni.conf", "w");
         fprintf(config, "%s", sni);
         fclose(config);
         printf("正在升级新内核. . .\n");
