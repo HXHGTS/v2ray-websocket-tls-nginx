@@ -57,11 +57,6 @@ Menu:UI();
         fclose(config);
         system("cp -rf /root/1.pem /usr/local/etc/v2ray/certificate.pem");
         system("cp -rf /root/2.pem /usr/local/etc/v2ray/private.pem");
-        config = fopen("/etc/nginx/conf.d/default.conf", "w");
-        fprintf(config, "server {\n");
-        fprintf(config, "    server_name  %s;\n", sni);
-        fclose(config);
-        system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf >> /etc/nginx/conf.d/default.conf");
         system("systemctl restart nginx");
         goto Menu;
     }
@@ -132,11 +127,7 @@ int install_v2ray() {
     fclose(config);
     system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/config.json.2 >> /usr/local/etc/v2ray/config.json");
     printf("正在配置html网页. . .\n");
-    config = fopen("/etc/nginx/conf.d/default.conf", "w");
-    fprintf(config, "server {\n");
-    fprintf(config, "    server_name  %s;\n", sni);
-    fclose(config);
-    system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf >> /etc/nginx/conf.d/default.conf");
+    system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf > /etc/nginx/conf.d/default.conf");
     system("wget https://github.com/HXHGTS/v2ray-websocket-tls-nginx/raw/master/html.zip -O /usr/share/nginx/html/html.zip");
     system("unzip -o /usr/share/nginx/html/html.zip -d /usr/share/nginx/html");
     system("rm -f /usr/share/nginx/html/html.zip");
