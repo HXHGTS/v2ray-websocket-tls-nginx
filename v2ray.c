@@ -150,6 +150,11 @@ int install_v2ray() {
     printf("正在启动nginx并将nginx写入开机引导项. . .\n");
     system("systemctl enable nginx");
     system("systemctl start nginx");
+    system("mkdir /etc/systemd/system/nginx.service.d");
+    system("printf \"[Service]\nExecStartPost=/bin/sleep 0.1\n\" > /etc/systemd/system/nginx.service.d/override.conf");
+    system("systemctl daemon-reload");
+    system("systemctl restart nginx.service");
+    system("setsebool -P httpd_can_network_connect 1");
     config = fopen("/usr/local/etc/v2ray/client.json", "w");
     fprintf(config, "  - {name: %s, server: %s, port: 443, type: vmess, uuid: %s, alterId: 2, cipher: auto, tls: true, network: ws, ws-path: /iso, ws-headers: {Host: %s}, udp: true}", sni,sni,uuid,sni);
     fclose(config);
