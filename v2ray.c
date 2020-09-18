@@ -10,7 +10,6 @@ int main(){
 Menu:UI();
     system("clear");
     if (mode == 1) {
-        DNS();
         install_v2ray();
         goto Menu;
     }
@@ -135,6 +134,7 @@ int install_v2ray() {
     config = fopen("/usr/local/etc/sni.conf", "r");
     fscanf(config, "%s", sni);
     fclose(config);
+    DNS();
     system("setenforce 0");
     system("yum install -y curl unzip bind-utils epel-release nginx");
     system("wget https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh -O install-release.sh");
