@@ -3,14 +3,14 @@
 
 
 FILE* config,* cer;
-char uuid[40],sni[30];
+char uuid[40],sni[30], dns_server[35];
 int mode;
 
 int main(){
-    system("clear");
 Menu:UI();
     system("clear");
     if (mode == 1) {
+        DNS();
         install_v2ray();
         goto Menu;
     }
@@ -19,6 +19,12 @@ Menu:UI();
         system("systemctl stop nginx");
         system("systemctl start v2ray");
         system("systemctl start nginx");
+        printf("正在检测v2ray与nginx运行状态，以下输出不为空则运行正常！\n");
+        printf("--------------以下输出不为空则v2ray运行正常------------------\n");
+        system("ss -lp | grep v2ray");
+        printf("\n--------------以下输出不为空则nginx运行正常------------------\n");
+        system("ss -lp | grep nginx");
+        printf("--------------------------------------------------------\n");
         goto Menu;
     }
     else if (mode == 3) {
@@ -37,12 +43,24 @@ Menu:UI();
         system("vi /usr/local/etc/v2ray/config.json");
         system("systemctl restart v2ray");
         system("systemctl restart nginx");
+        printf("正在检测v2ray与nginx运行状态，以下输出不为空则运行正常！\n");
+        printf("--------------以下输出不为空则v2ray运行正常------------------\n");
+        system("ss -lp | grep v2ray");
+        printf("\n--------------以下输出不为空则nginx运行正常------------------\n");
+        system("ss -lp | grep nginx");
+        printf("--------------------------------------------------------\n");
         goto Menu;
     }
     else if (mode == 5) {
         system("vi /etc/nginx/conf.d/default.conf");
         system("systemctl restart v2ray");
         system("systemctl restart nginx");
+        printf("正在检测v2ray与nginx运行状态，以下输出不为空则运行正常！\n");
+        printf("--------------以下输出不为空则v2ray运行正常------------------\n");
+        system("ss -lp | grep v2ray");
+        printf("\n--------------以下输出不为空则nginx运行正常------------------\n");
+        system("ss -lp | grep nginx");
+        printf("--------------------------------------------------------\n");
         goto Menu;
     }
     else if (mode == 6) {
@@ -58,6 +76,12 @@ Menu:UI();
         system("cp -rf /root/1.pem /usr/local/etc/v2ray/certificate.pem");
         system("cp -rf /root/2.pem /usr/local/etc/v2ray/private.pem");
         system("systemctl restart nginx");
+        printf("正在检测v2ray与nginx运行状态，以下输出不为空则运行正常！\n");
+        printf("--------------以下输出不为空则v2ray运行正常------------------\n");
+        system("ss -lp | grep v2ray");
+        printf("\n--------------以下输出不为空则nginx运行正常------------------\n");
+        system("ss -lp | grep nginx");
+        printf("--------------------------------------------------------\n");
         goto Menu;
     }
     else if (mode == 7) {
@@ -71,6 +95,12 @@ Menu:UI();
         system("systemctl start nginx");
         system("rm -rf install-release.sh");
         printf("v2ray主程序更新完成！\n");
+        printf("正在检测v2ray与nginx运行状态，以下输出不为空则运行正常！\n");
+        printf("--------------以下输出不为空则v2ray运行正常------------------\n");
+        system("ss -lp | grep v2ray");
+        printf("\n--------------以下输出不为空则nginx运行正常------------------\n");
+        system("ss -lp | grep nginx");
+        printf("--------------------------------------------------------\n");
         goto Menu;
     }
     else if (mode == 8) {
@@ -88,7 +118,7 @@ int UI() {
     printf("-----------------------------------------------------------\n");
     printf("----------------------v2ray安装工具-----------------------\n");
     printf("-----------------------------------------------------------\n");
-    printf("安装前或需要更新SSL证书，请将证书(.cer/.crt/.pem)与私钥(.key/.pem)分别命名为1.pem与2.pem，上传至服务器/root目录\n");
+    printf("安装前或需要更新SSL证书，请将证书(*.cer/*.crt/*.pem)与私钥(*.key/*.pem)分别命名为1.pem与2.pem，上传至服务器/root目录\n");
     printf("-----------------------------------------------------------\n");
     printf("----------------------当前Kernel版本-----------------------\n");
     system("uname -sr");
@@ -127,7 +157,16 @@ int install_v2ray() {
     fclose(config);
     system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/config.json.2 >> /usr/local/etc/v2ray/config.json");
     printf("正在配置html网页. . .\n");
-    system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf > /etc/nginx/conf.d/default.conf");
+    system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf.1 > /etc/nginx/conf.d/default.conf");
+    printf("正在读取服务器DNS地址. . .\n");
+    config = fopen("/usr/local/etc/dns.info", "r");
+    fscanf(config, "%s", dns_server);
+    fclose(config);
+    printf("正在配置DNS地址. . .\n");
+    config = fopen("/etc/nginx/conf.d/default.conf", "a");
+    fscanf(config, "resolver %s valid=300s;\n", dns_server);
+    fclose(config);
+    system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf.2 >> /etc/nginx/conf.d/default.conf");
     system("wget https://github.com/HXHGTS/v2ray-websocket-tls-nginx/raw/master/html.zip -O /usr/share/nginx/html/html.zip");
     system("unzip -o /usr/share/nginx/html/html.zip -d /usr/share/nginx/html");
     system("rm -f /usr/share/nginx/html/html.zip");
@@ -180,5 +219,22 @@ int KernelUpdate() {
         system("chmod +x TCPO.sh");
         system("bash TCPO.sh");
     }
+    return 0;
+}
+
+int DNS() {
+    system("yum install bind-utils -y");
+    system("sleep 2");
+    system("nslookup localhost | grep Server > /usr/local/etc/dns.temp");
+    system("sleep 2");
+    server_info = fopen("/usr/local/etc/dns.temp", "r");
+    fscanf(server_info, "Server:		%s", dns_server);
+    fclose(server_info);
+    system("rm -rf /usr/local/etc/dns.temp");
+    printf("正在配置DNS. . .\n");
+    server_info = fopen("/usr/local/etc/dns.info", "w");
+    fprintf(server_info, "%s", dns_server);
+    fclose(server_info);//使用系统默认DNS解析
+    system("clear");
     return 0;
 }
