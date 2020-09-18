@@ -227,13 +227,13 @@ int DNS() {
     system("sleep 2");
     system("nslookup localhost | grep Server > /usr/local/etc/dns.temp");
     system("sleep 2");
-    server_info = fopen("/usr/local/etc/dns.temp", "r");
-    fscanf(server_info, "Server:		%s", dns_server);
-    fclose(server_info);
+    config = fopen("/usr/local/etc/dns.temp", "r");
+    fscanf(config, "Server:		%s", dns_server);
+    fclose(config);
     system("rm -rf /usr/local/etc/dns.temp");
-    server_info = fopen("/usr/local/etc/dns.info", "w");
-    fprintf(server_info, "%s", dns_server);
-    fclose(server_info);//使用系统默认DNS解析
+    config = fopen("/usr/local/etc/dns.info", "w");
+    fprintf(config, "%s", dns_server);
+    fclose(config);//使用系统默认DNS解析
     system("clear");
     return 0;
 }
