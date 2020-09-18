@@ -3,7 +3,7 @@
 
 
 FILE* config,* cer;
-char uuid[40],sni[30], dns_server[35];
+char uuid[40],sni[30];
 int mode;
 
 int main(){
@@ -144,7 +144,6 @@ int install_v2ray() {
     system("rm -rf TCPO.sh");
     system("cp -rf /root/1.pem /usr/local/etc/v2ray/certificate.pem");
     system("cp -rf /root/2.pem /usr/local/etc/v2ray/private.pem");
-    DNS();
     printf("正在生成配置文件. . .\n");
     system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/config.json.1 > /usr/local/etc/v2ray/config.json");
     printf("正在生成UUID. . .\n");
@@ -157,16 +156,7 @@ int install_v2ray() {
     fclose(config);
     system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/config.json.2 >> /usr/local/etc/v2ray/config.json");
     printf("正在配置html网页. . .\n");
-    system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf.1 > /etc/nginx/conf.d/default.conf");
-    printf("正在读取服务器DNS地址. . .\n");
-    config = fopen("/usr/local/etc/dns.info", "r");
-    fscanf(config, "%s", dns_server);
-    fclose(config);
-    printf("正在配置DNS地址. . .\n");
-    config = fopen("/etc/nginx/conf.d/default.conf", "a");
-    fscanf(config, "resolver %s valid=300s;\n", dns_server);
-    fclose(config);
-    system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf.2 >> /etc/nginx/conf.d/default.conf");
+    system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf > /etc/nginx/conf.d/default.conf");
     system("wget https://github.com/HXHGTS/v2ray-websocket-tls-nginx/raw/master/html.zip -O /usr/share/nginx/html/html.zip");
     system("unzip -o /usr/share/nginx/html/html.zip -d /usr/share/nginx/html");
     system("rm -f /usr/share/nginx/html/html.zip");
@@ -222,16 +212,3 @@ int KernelUpdate() {
     return 0;
 }
 
-int DNS() {
-    system("nslookup localhost | grep Server > /usr/local/etc/dns.temp");
-    system("sleep 2");
-    config = fopen("/usr/local/etc/dns.temp", "r");
-    fscanf(config, "Server:		%s", dns_server);
-    fclose(config);
-    system("rm -rf /usr/local/etc/dns.temp");
-    config = fopen("/usr/local/etc/dns.info", "w");
-    fprintf(config, "%s", dns_server);
-    fclose(config);//使用系统默认DNS解析
-    system("clear");
-    return 0;
-}
