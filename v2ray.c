@@ -231,7 +231,6 @@ int DNS() {
     fscanf(server_info, "Server:		%s", dns_server);
     fclose(server_info);
     system("rm -rf /usr/local/etc/dns.temp");
-    printf("正在配置DNS. . .\n");
     server_info = fopen("/usr/local/etc/dns.info", "w");
     fprintf(server_info, "%s", dns_server);
     fclose(server_info);//使用系统默认DNS解析
