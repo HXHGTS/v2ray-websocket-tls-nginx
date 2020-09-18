@@ -44,16 +44,3 @@ server {
     ssl_session_tickets off;  
     ssl_stapling on;  
     ssl_stapling_verify on;  
-    resolver 1.1.1.1 1.0.0.1 valid=300s;  
-    resolver_timeout 100s;  
-    if ($request_method  !~ ^(POST|GET)$) { return 501; }  
-    add_header X-Frame-Options DENY;  
-    add_header X-XSS-Protection "1; mode=block";  
-    add_header X-Content-Type-Options nosniff;  
-    add_header Strict-Transport-Security max-age=31536000 always;  
-    autoindex off;  
-    server_tokens off;  
-    index index.html index.htm  index.php;  
-    location ~ .*.(js|jpg|JPG|jpeg|JPEG|css|bmp|gif|GIF|png)$ { access_log off; }  
-    location / { index index.html; }  
-}
