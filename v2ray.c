@@ -134,7 +134,6 @@ int install_v2ray() {
     config = fopen("/usr/local/etc/sni.conf", "r");
     fscanf(config, "%s", sni);
     fclose(config);
-    DNS();
     system("setenforce 0");
     system("yum install -y curl unzip bind-utils epel-release nginx");
     system("wget https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh -O install-release.sh");
@@ -145,6 +144,7 @@ int install_v2ray() {
     system("rm -rf TCPO.sh");
     system("cp -rf /root/1.pem /usr/local/etc/v2ray/certificate.pem");
     system("cp -rf /root/2.pem /usr/local/etc/v2ray/private.pem");
+    DNS();
     printf("正在生成配置文件. . .\n");
     system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/config.json.1 > /usr/local/etc/v2ray/config.json");
     printf("正在生成UUID. . .\n");
@@ -223,8 +223,6 @@ int KernelUpdate() {
 }
 
 int DNS() {
-    system("yum install bind-utils -y");
-    system("sleep 2");
     system("nslookup localhost | grep Server > /usr/local/etc/dns.temp");
     system("sleep 2");
     config = fopen("/usr/local/etc/dns.temp", "r");
