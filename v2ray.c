@@ -3,7 +3,7 @@
 
 
 FILE* config,* cer;
-char uuid[40],sni[30],cmd[100];
+char uuid[40],sni[30];
 int mode;
 
 int main(){
@@ -76,8 +76,9 @@ Menu:UI();
         system("cp -rf /root/2.pem /usr/local/etc/v2ray/private.pem");
         printf("正在配置html网页. . .\n");
         system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf.1 > /etc/nginx/conf.d/default.conf");
-        sprintf(cmd, "echo \"    server_name %s;\" >> /etc/nginx/conf.d/default.conf", sni);
-        system(cmd);
+        config = fopen("/etc/nginx/conf.d/default.conf", "a");
+        fprintf(config, "    server_name %s;\n", sni);
+        fclose(config);
         system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf.2 >> /etc/nginx/conf.d/default.conf");
         system("systemctl restart nginx");
         printf("正在检测v2ray与nginx运行状态，以下输出不为空则运行正常！\n");
@@ -162,8 +163,9 @@ int install_v2ray() {
     system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/config.json.2 >> /usr/local/etc/v2ray/config.json");
     printf("正在配置html网页. . .\n");
     system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf.1 > /etc/nginx/conf.d/default.conf");
-    sprintf(cmd, "echo \"    server_name %s;\" >> /etc/nginx/conf.d/default.conf",sni);
-    system(cmd);
+    config = fopen("/etc/nginx/conf.d/default.conf", "a");
+    fprintf(config, "    server_name %s;\n",sni);
+    fclose(config);
     system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf.2 >> /etc/nginx/conf.d/default.conf");
     system("wget https://github.com/HXHGTS/v2ray-websocket-tls-nginx/raw/master/html.zip -O /usr/share/nginx/html/html.zip");
     system("unzip -o /usr/share/nginx/html/html.zip -d /usr/share/nginx/html");
