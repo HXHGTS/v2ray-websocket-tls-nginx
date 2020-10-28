@@ -27,14 +27,11 @@ Menu:UI();
         goto Menu;
     }
     else if (mode == 3) {
-        printf("v2ray配置:\n");
-        system("cat /usr/local/etc/v2ray/config.json");
-        printf("\n");
-        printf("nginx配置:\n");
-        system("cat /etc/nginx/conf.d/default.conf");
-        printf("\n");
-        printf("客户端配置:\n");
-        system("cat /usr/local/etc/v2ray/client.json");
+        printf("v2ray二维码:\n\n");
+        system("qrencode -t ansiutf8 < /usr/local/etc/v2ray/vmess.txt");
+        printf("\n\n");
+        printf("Vmess链接:\n\n");
+        system("bash /usr/local/etc/v2ray/code_gen.sh");
         printf("\n");
         goto Menu;
     }
