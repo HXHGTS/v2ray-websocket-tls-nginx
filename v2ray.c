@@ -74,6 +74,9 @@ Menu:UI();
         fclose(config);
         system("cp -rf /root/1.pem /usr/local/etc/v2ray/certificate.pem");
         system("cp -rf /root/2.pem /usr/local/etc/v2ray/private.pem");
+        config = fopen("/usr/local/etc/v2ray/uuid.conf", "r");
+        fscanf(config, "%s", uuid);
+        fclose(config);
         printf("正在配置html网页. . .\n");
         system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf.1 > /etc/nginx/conf.d/default.conf");
         config = fopen("/etc/nginx/conf.d/default.conf", "a");
@@ -81,12 +84,19 @@ Menu:UI();
         fclose(config);
         system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf.2 >> /etc/nginx/conf.d/default.conf");
         system("systemctl restart nginx");
+        QRCodeGen();
         printf("正在检测v2ray与nginx运行状态，以下输出不为空则运行正常！\n");
         printf("--------------以下输出不为空则v2ray运行正常------------------\n");
         system("ss -lp | grep v2ray");
         printf("\n--------------以下输出不为空则nginx运行正常------------------\n");
         system("ss -lp | grep nginx");
         printf("--------------------------------------------------------\n");
+        printf("v2ray部署完成！\n");
+        printf("v2ray二维码:\n\n");
+        system("qrencode -t ansiutf8 < /usr/local/etc/v2ray/vmess.txt");
+        printf("\n\n");
+        printf("Vmess链接:\n\n");
+        system("bash /usr/local/etc/v2ray/code_gen.sh");
         goto Menu;
     }
     else if (mode == 7) {
@@ -141,7 +151,7 @@ int install_v2ray() {
     fscanf(config, "%s", sni);
     fclose(config);
     system("setenforce 0");
-    system("yum install -y curl unzip bind-utils epel-release nginx");
+    system("yum install -y curl unzip bind-utils qrencode epel-release nginx");
     system("wget https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh -O install-release.sh");
     system("chmod +x install-release.sh");
     system("bash install-release.sh");
@@ -181,9 +191,7 @@ int install_v2ray() {
     system("systemctl daemon-reload");
     system("systemctl restart nginx.service");
     system("setsebool -P httpd_can_network_connect 1");
-    config = fopen("/usr/local/etc/v2ray/client.json", "w");
-    fprintf(config, "  - {name: %s, server: %s, port: 443, type: vmess, uuid: %s, alterId: 2, cipher: auto, tls: true, network: ws, ws-path: /iso, ws-headers: {Host: %s}, udp: true}", sni,sni,uuid,sni);
-    fclose(config);
+    QRCodeGen();
     printf("正在检测v2ray与nginx运行状态，以下输出不为空则运行正常！\n");
     printf("--------------以下输出不为空则v2ray运行正常------------------\n");
     system("ss -lp | grep v2ray");
@@ -191,9 +199,36 @@ int install_v2ray() {
     system("ss -lp | grep nginx");
     printf("--------------------------------------------------------\n");
     printf("v2ray部署完成！\n");
-    printf("Clash配置:\n\n");
-    system("cat /usr/local/etc/v2ray/client.json");
+    printf("v2ray二维码:\n\n");
+    system("qrencode -t ansiutf8 < /usr/local/etc/v2ray/vmess.txt");
     printf("\n\n");
+    printf("Vmess链接:\n\n");
+    system("bash /usr/local/etc/v2ray/code_gen.sh");
+    return 0;
+}
+
+int QRCodeGen() {
+    config = fopen("/usr/local/etc/v2ray/code_gen.sh", "w");
+    fprintf(config, "#!/bin/bash\n");
+    fprintf(config, "VMESSCODE=$(base64 -w 0 << EOF\n");
+    fprintf(config, "    {\n");
+    fprintf(config, "      \"v\": \"2\",\n");
+    fprintf(config, "      \"ps\": \"v2ray\",\n");
+    fprintf(config, "      \"add\": \"%s\",\n",sni);//Addr
+    fprintf(config, "      \"port\": \"443\",\n");
+    fprintf(config, "      \"id\": \"%s\",\n",uuid);//UUID
+    fprintf(config, "      \"aid\": \"2\",\n");
+    fprintf(config, "      \"net\": \"ws\",\n");
+    fprintf(config, "      \"type\": \"none\",\n");
+    fprintf(config, "      \"host\": \"%s\",\n",sni);
+    fprintf(config, "      \"path\": \"/iso\",\n");
+    fprintf(config, "      \"tls\": \"tls\"\n");
+    fprintf(config, "    }\n");
+    fprintf(config, "EOF\n");
+    fprintf(config, "    )\n");
+    fprintf(config, "echo vmess://${VMESSCODE}\n");
+    fclose(config);
+    system("bash /usr/local/etc/v2ray/code_gen.sh > /usr/local/etc/v2ray/vmess.txt");
     return 0;
 }
 
