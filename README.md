@@ -14,6 +14,8 @@
 
 CDN套用方法请参看[CDN套用方法](/cdn.md)
 
+脚本生成的二维码可以用v2ray客户端扫描导入，VMESS链接可以直接导入v2ray客户端或在[这里](https://hxhgts.icu/ClashRuleTransfer/)生成Clash链接以导入Clash
+
 ### 安装前准备：
 
 1.一个域名，与服务器ip做好dns解析
