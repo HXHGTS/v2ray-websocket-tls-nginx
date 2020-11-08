@@ -219,7 +219,7 @@ int QRCodeGen() {
     fprintf(config, "      \"add\": \"%s\",\n",sni);//Addr
     fprintf(config, "      \"port\": \"443\",\n");
     fprintf(config, "      \"id\": \"%s\",\n",uuid);//UUID
-    fprintf(config, "      \"aid\": \"2\",\n");
+    fprintf(config, "      \"aid\": \"0\",\n");
     fprintf(config, "      \"net\": \"ws\",\n");
     fprintf(config, "      \"type\": \"none\",\n");
     fprintf(config, "      \"host\": \"%s\",\n",sni);
