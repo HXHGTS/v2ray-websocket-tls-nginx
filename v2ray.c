@@ -158,7 +158,7 @@ int install_v2ray() {
     fscanf(config, "%s", sni);
     fclose(config);
     config = fopen("/usr/local/etc/aaaa.conf", "r");
-    fscanf(config, "%d", aaaa);
+    fscanf(config, "%d", &aaaa);
     fclose(config);
     system("setenforce 0");
     system("yum install -y curl unzip epel-release nginx bind-utils ntpdate qrencode");
