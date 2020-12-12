@@ -152,10 +152,11 @@ int UI() {
 
 int install_v2ray() {
     KernelUpdate(); 
-    printf("监听ipv4还是ipv6:\n\n1.ipv4(普通主机请选这个)\n\n2.ipv6(纯ipv6主机请选这个)\n\n请输入:");
-    scanf("%d", &aaaa);
     config = fopen("/usr/local/etc/sni.conf", "r");
     fscanf(config, "%s", sni);
+    fclose(config);
+    config = fopen("/usr/local/etc/aaaa.conf", "r");
+    fscanf(config, "%d", aaaa);
     fclose(config);
     system("setenforce 0");
     system("yum install -y curl unzip epel-release nginx bind-utils ntpdate qrencode");
@@ -256,8 +257,13 @@ int KernelUpdate() {
     }
         printf("请输入已绑定此服务器ip的域名:");
         scanf("%s", sni);
+        printf("监听ipv4还是ipv6:\n\n1.ipv4(普通主机请选这个)\n\n2.ipv6(纯ipv6主机请选这个)\n\n请输入:");
+        scanf("%d", &aaaa);
         config = fopen("/usr/local/etc/sni.conf", "w");
         fprintf(config, "%s", sni);
+        fclose(config);
+        config = fopen("/usr/local/etc/aaaa.conf", "w");
+        fprintf(config, "%d", aaaa);
         fclose(config);
         printf("正在升级新内核. . .\n");
         system("wget https://github.com/HXHGTS/TCPOptimization/raw/master/KernelUpdate.sh");
