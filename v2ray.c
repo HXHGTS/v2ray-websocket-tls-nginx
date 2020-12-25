@@ -4,7 +4,7 @@
 
 FILE* config,* cer;
 char uuid[40],sni[30];
-int mode,aaaa;
+int mode;
 
 int main(){
 Menu:UI();
@@ -66,8 +66,6 @@ Menu:UI();
         }
         printf("请输入已绑定此服务器ip的新域名:");
         scanf("%s", sni);
-        printf("监听ipv4还是ipv6:\n\n1.ipv4(普通主机请选这个)\n\n2.ipv6(纯ipv6主机请选这个)\n\n请输入:");
-        scanf("%d", &aaaa);
         config = fopen("/usr/local/etc/sni.conf", "w");
         fprintf(config, "%s", sni);
         fclose(config);
@@ -84,12 +82,7 @@ Menu:UI();
         config = fopen("/etc/nginx/conf.d/default.conf", "a");
         fprintf(config, "    server_name %s;\n", sni);
         fclose(config);
-        if(aaaa==1){
-            system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf.ipv4 >> /etc/nginx/conf.d/default.conf");
-        }
-        else{
-            system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf.ipv6 >> /etc/nginx/conf.d/default.conf");
-        }
+        system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf >> /etc/nginx/conf.d/default.conf");
         system("systemctl restart nginx");
         QRCodeGen();
         printf("正在检测v2ray与nginx运行状态，以下输出不为空则运行正常！\n");
@@ -157,9 +150,6 @@ int install_v2ray() {
     config = fopen("/usr/local/etc/sni.conf", "r");
     fscanf(config, "%s", sni);
     fclose(config);
-    config = fopen("/usr/local/etc/aaaa.conf", "r");
-    fscanf(config, "%d", &aaaa);
-    fclose(config);
     system("setenforce 0");
     system("yum install -y curl unzip epel-release nginx bind-utils ntpdate qrencode");
     printf("正在同步时间. . .\n");
@@ -192,12 +182,7 @@ int install_v2ray() {
     config = fopen("/etc/nginx/conf.d/default.conf", "a");
     fprintf(config, "    server_name %s;\n",sni);
     fclose(config);
-    if(aaaa==1){
-            system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf.ipv4 >> /etc/nginx/conf.d/default.conf");
-        }
-        else{
-            system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf.ipv6 >> /etc/nginx/conf.d/default.conf");
-        }
+    system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf >> /etc/nginx/conf.d/default.conf");
     system("wget https://github.com/HXHGTS/v2ray-websocket-tls-nginx/raw/master/html.zip -O /usr/share/nginx/html/html.zip");
     system("unzip -o /usr/share/nginx/html/html.zip -d /usr/share/nginx/html");
     system("rm -f /usr/share/nginx/html/html.zip");
@@ -261,13 +246,8 @@ int KernelUpdate() {
     }
         printf("请输入已绑定此服务器ip的域名:");
         scanf("%s", sni);
-        printf("监听ipv4还是ipv6:\n\n1.ipv4(普通主机请选这个)\n\n2.ipv6(纯ipv6主机请选这个)\n\n请输入:");
-        scanf("%d", &aaaa);
         config = fopen("/usr/local/etc/sni.conf", "w");
         fprintf(config, "%s", sni);
-        fclose(config);
-        config = fopen("/usr/local/etc/aaaa.conf", "w");
-        fprintf(config, "%d", aaaa);
         fclose(config);
         printf("正在升级新内核. . .\n");
         system("wget https://github.com/HXHGTS/TCPOptimization/raw/master/KernelUpdate.sh");
