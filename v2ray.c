@@ -153,7 +153,7 @@ int install_v2ray() {
     system("setenforce 0");
     system("yum install -y curl unzip epel-release nginx bind-utils ntpdate qrencode");
     printf("正在同步时间. . .\n");
-    system("ntpdate -u time.cloudflare.com");
+    system("ntpdate -u time.apple.com");
     printf("正在运行v2ray安装脚本. . .\n");
     system("wget https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh -O install-release.sh");
     system("chmod +x install-release.sh");
