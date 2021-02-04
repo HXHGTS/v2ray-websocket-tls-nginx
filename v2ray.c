@@ -82,7 +82,7 @@ Menu:UI();
         config = fopen("/etc/nginx/conf.d/default.conf", "a");
         fprintf(config, "    server_name %s;\n", sni);
         fclose(config);
-        system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf >> /etc/nginx/conf.d/default.conf");
+        system("curl https://cdn.jsdelivr.net/gh/HXHGTS/v2ray-websocket-tls-nginx/default.conf >> /etc/nginx/conf.d/default.conf");
         system("systemctl restart nginx");
         QRCodeGen();
         printf("正在检测v2ray与nginx运行状态，以下输出不为空则运行正常！\n");
@@ -103,7 +103,7 @@ Menu:UI();
         printf("正在更新v2ray主程序. . .\n");
         system("systemctl stop v2ray");
         system("systemctl stop nginx");
-        system("wget https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh -O install-release.sh");
+        system("wget https://cdn.jsdelivr.net/gh/v2fly/fhs-install-v2ray/install-release.sh -O install-release.sh");
         system("chmod +x install-release.sh");
         system("bash install-release.sh");
         system("systemctl start v2ray");
@@ -155,7 +155,7 @@ int install_v2ray() {
     printf("正在同步时间. . .\n");
     system("ntpdate -u time.apple.com");
     printf("正在运行v2ray安装脚本. . .\n");
-    system("wget https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh -O install-release.sh");
+    system("wget https://cdn.jsdelivr.net/gh/v2fly/fhs-install-v2ray/install-release.sh -O install-release.sh");
     system("chmod +x install-release.sh");
     system("bash install-release.sh");
     system("sleep 3");
@@ -165,7 +165,7 @@ int install_v2ray() {
     system("cp -rf /root/1.pem /usr/local/etc/v2ray/certificate.pem");
     system("cp -rf /root/2.pem /usr/local/etc/v2ray/private.pem");
     printf("正在生成配置文件. . .\n");
-    system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/config.json.1 > /usr/local/etc/v2ray/config.json");
+    system("curl https://cdn.jsdelivr.net/gh/HXHGTS/v2ray-websocket-tls-nginx/config.json.1 > /usr/local/etc/v2ray/config.json");
     printf("正在生成UUID. . .\n");
     system("v2ctl uuid > /usr/local/etc/v2ray/uuid.conf");
     config = fopen("/usr/local/etc/v2ray/uuid.conf", "r");
@@ -174,7 +174,7 @@ int install_v2ray() {
     config = fopen("/usr/local/etc/v2ray/config.json", "a");
     fprintf(config, "       \"id\": \"%s\",  \n", uuid);
     fclose(config);
-    system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/config.json.2 >> /usr/local/etc/v2ray/config.json");
+    system("curl https://cdn.jsdelivr.net/gh/HXHGTS/v2ray-websocket-tls-nginx/config.json.2 >> /usr/local/etc/v2ray/config.json");
     printf("正在配置html网页. . .\n");
     config = fopen("/etc/nginx/conf.d/default.conf", "w");
     fprintf(config, "server {\n");
@@ -182,8 +182,8 @@ int install_v2ray() {
     config = fopen("/etc/nginx/conf.d/default.conf", "a");
     fprintf(config, "    server_name %s;\n",sni);
     fclose(config);
-    system("curl https://raw.githubusercontent.com/HXHGTS/v2ray-websocket-tls-nginx/master/default.conf >> /etc/nginx/conf.d/default.conf");
-    system("wget https://github.com/HXHGTS/v2ray-websocket-tls-nginx/raw/master/html.zip -O /usr/share/nginx/html/html.zip");
+    system("curl https://cdn.jsdelivr.net/gh/HXHGTS/v2ray-websocket-tls-nginx/default.conf >> /etc/nginx/conf.d/default.conf");
+    system("wget https://cdn.jsdelivr.net/gh/HXHGTS/v2ray-websocket-tls-nginx/html.zip -O /usr/share/nginx/html/html.zip");
     system("unzip -o /usr/share/nginx/html/html.zip -d /usr/share/nginx/html");
     system("rm -f /usr/share/nginx/html/html.zip");
     printf("正在启动v2ray并将v2ray写入开机引导项. . .\n");
@@ -250,13 +250,13 @@ int KernelUpdate() {
         fprintf(config, "%s", sni);
         fclose(config);
         printf("正在升级新内核. . .\n");
-        system("wget https://github.com/HXHGTS/TCPOptimization/raw/master/KernelUpdate.sh");
+        system("wget https://cdn.jsdelivr.net/gh/HXHGTS/TCPOptimization/KernelUpdate.sh");
         system("chmod +x KernelUpdate.sh");
         printf("正在升级，将自动触发重启以应用配置. . .\n");
         system("bash KernelUpdate.sh");
     }
     else {
-        system("wget https://github.com/HXHGTS/TCPOptimization/raw/master/TCPO.sh");
+        system("wget https://cdn.jsdelivr.net/gh/HXHGTS/TCPOptimization/TCPO.sh");
         system("chmod +x TCPO.sh");
         system("bash TCPO.sh");
     }
