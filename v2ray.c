@@ -250,13 +250,13 @@ int KernelUpdate() {
         fprintf(config, "%s", sni);
         fclose(config);
         printf("正在升级新内核. . .\n");
-        system("wget https://cdn.jsdelivr.net/gh/HXHGTS/TCPOptimization/KernelUpdate.sh");
+        system("wget https://cdn.jsdelivr.net/gh/HXHGTS/TCPOptimization/KernelUpdate.sh -O KernelUpdate.sh");
         system("chmod +x KernelUpdate.sh");
         printf("正在升级，将自动触发重启以应用配置. . .\n");
         system("bash KernelUpdate.sh");
     }
     else {
-        system("wget https://cdn.jsdelivr.net/gh/HXHGTS/TCPOptimization/TCPO.sh");
+        system("wget https://cdn.jsdelivr.net/gh/HXHGTS/TCPOptimization/TCPO.sh -O TCPO.sh");
         system("chmod +x TCPO.sh");
         system("bash TCPO.sh");
     }
